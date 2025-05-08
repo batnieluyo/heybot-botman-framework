@@ -25,7 +25,7 @@ cd whatsapp-bot-api
 ## ⚙️ Install PHP Dependencies
 
 ```bash
-composer install
+herd composer install
 ```
 
 ## 🔐 Copy & Configure Environment
@@ -37,22 +37,22 @@ cp .env.example .env
 ## 🔑 Generate Application Key
 
 ```bash
-php artisan key:generate
+herd php artisan key:generate
 ```
 
 ## 🗄️ Run Migrations
 
 ```bash
-php artisan migrate
+herd php artisan migrate
 
 # Or with seeds
-# php artisan migrate --seed
+# herd php artisan migrate --seed
 ```
 
 ## 🍔 Make your stage's
 
 ```bash
-php artisan make:stage ExampleStage
+herd php artisan make:stage ExampleStage
 
 # INFO  [app/Actions/Journey/Stages/ExampleStage.php] created successfully.
 ```
