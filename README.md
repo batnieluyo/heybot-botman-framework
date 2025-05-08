@@ -57,6 +57,12 @@ php artisan make:stage ExampleStage
 # INFO  [app/Actions/Journey/Stages/ExampleStage.php] created successfully.
 ```
 
+## 🔥 With Laravel Herd
+- **Laravel herd** for local development (https://herd.laravel.com/)
+```
+# Visit the link to see inbound events
+http://atd-whatsapp-bot-api.test/repl/whatsapp
+```
 
 ## 🤝 Contributing
 
