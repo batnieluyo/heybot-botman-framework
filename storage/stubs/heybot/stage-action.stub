@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Actions\Journey\Stages;
+
+use Carbon\Carbon;
+use App\Heybot\Botman;
+use App\Models\Contact;
+use App\Dto\WhatsAppMessage;
+use App\Options\WhatsAppMessageType;
+use App\Actions\WhatsApp\TextMessage;
+
+class {{ class }} extends Botman
+{
+    const string GROUP = 'default';
+    const string ACTION_NAME = 'default';
+
+    public function handle(WhatsAppMessage $whatsAppMessage, Contact $contact)
+        {
+            $this->toPhoneNumber($contact->phone);
+
+            // Add your awesome code 🚀
+
+            // You can validate some message type
+            // if ($whatsAppMessage->messageType !== WhatsAppMessageType::TEXT) {
+            // ...
+            //       return;
+            // }
+
+            $firstMessage = (new TextMessage)->handle(message: '¡Hola mundo!');
+            $secondMessage = (new TextMessage)->allowPreviewUrl()->handle(message: '¡Hola! Visita https://google.com');
+
+            // Recommended for only one message
+            // $this->sendMessage($firstMessage);
+
+            // Recommended if you will send many messages at once
+            $this->sendManyMessages([
+                $firstMessage,
+                $secondMessage
+            ]);
+
+            $this->saveMessagesSend();
+
+            $contact->update([
+                        'current_group' => self::GROUP,
+                        'current_stage' => self::ACTION_NAME,
+                        'message_send_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    ]);
+        }
+}
