@@ -2,8 +2,8 @@
 
 namespace App\Heybot;
 
-use Illuminate\Support\Facades\Log;
 use App\Heybot\Client\Whatsapp;
+use Illuminate\Support\Facades\Log;
 
 class Heybot
 {
@@ -17,6 +17,7 @@ class Heybot
     public function toPhoneNumber($phoneNumber)
     {
         $this->http->phoneNumber($phoneNumber);
+
         return $this;
     }
 
@@ -26,14 +27,15 @@ class Heybot
     }
 
     /**
-     * @param $message
      * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response|null
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     protected function __send($message)
     {
-        if (!$this->canConnectToServer()) {
+        if (! $this->canConnectToServer()) {
             Log::debug('send', $message);
+
             return null;
         }
 
@@ -41,14 +43,15 @@ class Heybot
     }
 
     /**
-     * @param array $messages
      * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response|null
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     protected function __bulkSend(array $messages)
     {
-        if (!$this->canConnectToServer()) {
+        if (! $this->canConnectToServer()) {
             Log::debug('bulk', $messages);
+
             return null;
         }
 

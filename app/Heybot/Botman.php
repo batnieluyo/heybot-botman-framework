@@ -27,8 +27,8 @@ class Botman extends Heybot
     }
 
     /**
-     * @param $message
      * @return PromiseInterface|Response|null
+     *
      * @throws ConnectionException
      */
     public function sendMessage($message)
@@ -36,12 +36,13 @@ class Botman extends Heybot
         $this->messagesSent++;
         $message = $message->toArray();
         $this->messageList[] = $message;
+
         return $this->__send($message);
     }
 
     /**
-     * @param array $messages
      * @return PromiseInterface|Response|null
+     *
      * @throws ConnectionException
      */
     public function sendManyMessages(array $messages)
@@ -62,19 +63,19 @@ class Botman extends Heybot
     {
         $ts = Carbon::now()->timestamp;
 
-        $data = collect($this->messageList)->map(function ($message) use($ts, $contact) {
+        $data = collect($this->messageList)->map(function ($message) use ($ts, $contact) {
 
             $event = array_merge($message, [
                 'timestamp' => $ts,
                 'event' => 'message',
                 'contact' => [
                     'phone' => null,
-                    'displayName' => null
+                    'displayName' => null,
                 ],
                 'object' => [
                     'type' => 'text',
-                    'id' => null
-                ]
+                    'id' => null,
+                ],
             ]);
 
             return [
@@ -83,12 +84,10 @@ class Botman extends Heybot
                 'direction' => 'outbound',
                 'payload_type' => 'message',
                 'payload' => json_encode($event),
-                'created_at' => Carbon::now()->format("Y-m-d H:i:s"),
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
         });
 
         Message::insert($data->toArray());
     }
 }
-
-

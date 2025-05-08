@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Http\Controllers\CodeBlockController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use App\Http\Controllers\Webhook\WhatsAppController;
 
 class WhatsAppCodeBlockServiceProvider extends ServiceProvider
 {

@@ -11,16 +11,16 @@ class TextMessage
     public function allowPreviewUrl()
     {
         $this->linkPreview = true;
+
         return $this;
     }
 
     /**
-     * @param $message
      * @return Fluent
      */
     public function handle($message)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'text')

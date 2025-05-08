@@ -8,7 +8,9 @@ use Illuminate\Support\Str;
 class Message extends Model
 {
     protected $primaryKey = 'ulid';
+
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $fillable = [

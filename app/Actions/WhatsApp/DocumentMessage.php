@@ -7,13 +7,11 @@ use Illuminate\Support\Fluent;
 class DocumentMessage
 {
     /**
-     * @param string $fileName
-     * @param string $fileUrl
      * @return Fluent
      */
     public function handle(string $fileName, string $fileUrl)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'document')

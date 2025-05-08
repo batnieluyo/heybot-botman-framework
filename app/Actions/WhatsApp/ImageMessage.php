@@ -11,16 +11,16 @@ class ImageMessage
     public function withMessage(string $message)
     {
         $this->message = $message;
+
         return $this;
     }
 
     /**
-     * @param string $fileUrl
      * @return Fluent
      */
     public function handle(string $fileUrl)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'image')

@@ -15,5 +15,5 @@ class WhatsAppNewMessage
      */
     public function __construct(
         public array $request,
-    ){}
+    ) {}
 }

@@ -2,8 +2,8 @@
 
 namespace App\AutoLoaders;
 
-use App\Models\Contact;
 use App\Dto\WhatsAppMessage;
+use App\Models\Contact;
 
 interface JourneyStageInterface
 {

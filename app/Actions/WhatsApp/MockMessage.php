@@ -14,19 +14,16 @@ class MockMessage
         $randomBytes = random_bytes(32); // 32 random bytes
 
         // Combine timestamp and random bytes
-        $payload = pack('N', $timestamp) . $randomBytes;
+        $payload = pack('N', $timestamp).$randomBytes;
 
         // Base64 encode
         $base64 = base64_encode($payload);
 
         // Prefix with "wamid."
-        return 'wamid.' . $base64;
+        return 'wamid.'.$base64;
     }
 
     /**
-     * @param array $contact
-     * @param WhatsAppMessageType $messageType
-     * @param array $content
      * @return Fluent
      */
     public function create(array $contact, WhatsAppMessageType $messageType, array $content)
@@ -38,7 +35,7 @@ class MockMessage
             ->set('contact.displayName', $contact['displayName'])
             ->set('object', [
                 'type' => $messageType->value,
-                'id' => $this->generateWamid()
+                'id' => $this->generateWamid(),
             ])
             ->set('payload', $content);
     }

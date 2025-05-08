@@ -21,7 +21,7 @@ class InteractiveListMessage
 
     public function handle(string $header, string $message, string $buttonText, ?string $footer = null)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'interactiveList')

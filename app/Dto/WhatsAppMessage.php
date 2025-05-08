@@ -54,7 +54,7 @@ class WhatsAppMessage
         return $this->request['payload']['fileSize'] ?? null;
     }
 
-    public function getClickedButtonValue(): ? string
+    public function getClickedButtonValue(): ?string
     {
         return (string) $this->request['payload']['id'] ?? null;
     }
@@ -63,6 +63,7 @@ class WhatsAppMessage
     {
         $latitude = $this->request['payload']['latitude'];
         $longitude = $this->request['payload']['longitude'];
+
         return [$latitude, $longitude];
     }
 }

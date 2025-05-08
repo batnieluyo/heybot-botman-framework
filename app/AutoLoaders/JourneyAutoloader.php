@@ -2,8 +2,8 @@
 
 namespace App\AutoLoaders;
 
-use SplFileInfo;
 use InvalidArgumentException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -15,7 +15,6 @@ use Symfony\Component\Finder\Finder;
 class JourneyAutoloader
 {
     /**
-     * @param string $stage
      * @return \App\AutoLoaders\JourneyStageInterface
      */
     public static function boot(string $stage)
@@ -23,7 +22,7 @@ class JourneyAutoloader
         $location = base_path('app/Actions/Journey/Stages');
         $namespace = 'App\\Actions\\Journey\\Stages\\';
 
-        $files = (new Finder())
+        $files = (new Finder)
             ->in($location)
             ->depth(0)
             ->files()
@@ -34,7 +33,7 @@ class JourneyAutoloader
         foreach ($files as $file) {
             if ($file instanceof SplFileInfo) {
                 $basename = basename($file->getRelativePathname(), '.php');
-                $stageClass = $namespace . $basename;
+                $stageClass = $namespace.$basename;
 
                 if (defined("$stageClass::ACTION_NAME")
                     && $stageClass::ACTION_NAME === $stage
@@ -49,6 +48,6 @@ class JourneyAutoloader
             throw new InvalidArgumentException("The $stage stage is not registered");
         }
 
-        return new $classBase();
+        return new $classBase;
     }
 }

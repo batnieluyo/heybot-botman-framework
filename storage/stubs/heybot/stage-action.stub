@@ -17,6 +17,7 @@ class {{ class }} extends Botman
     public function handle(WhatsAppMessage $whatsAppMessage, Contact $contact)
         {
             $this->toPhoneNumber($contact->phone);
+            $this->saveIncomeMessage(contact: $contact, request: $whatsAppMessage->request);
 
             // Add your awesome code 🚀
 
@@ -38,12 +39,12 @@ class {{ class }} extends Botman
                 $secondMessage
             ]);
 
-            $this->saveMessagesSend();
+            $this->saveReplyMessagesTo(contact: $contact);
 
             $contact->update([
-                        'current_group' => self::GROUP,
-                        'current_stage' => self::ACTION_NAME,
-                        'message_send_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    ]);
+                'current_group' => self::GROUP,
+                'current_stage' => self::ACTION_NAME,
+                'message_send_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ]);
         }
 }

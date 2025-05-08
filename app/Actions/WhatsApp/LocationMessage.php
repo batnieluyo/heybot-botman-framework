@@ -8,7 +8,7 @@ class LocationMessage
 {
     public function handle($latitude, $longitude, $locationName, $address)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'location')

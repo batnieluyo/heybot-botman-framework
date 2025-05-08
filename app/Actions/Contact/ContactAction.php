@@ -22,7 +22,7 @@ class ContactAction
 
         if (! $contact->wasRecentlyCreated) {
             $contact->update([
-                'message_received_at' => $time
+                'message_received_at' => $time,
             ]);
         }
 

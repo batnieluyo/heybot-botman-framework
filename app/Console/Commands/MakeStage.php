@@ -40,7 +40,6 @@ class MakeStage extends Command
     /**
      * Create a new controller creator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -226,7 +225,6 @@ class MakeStage extends Command
         return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
     }
 
-
     /**
      * Alphabetically sorts the imports for the given stub.
      *
@@ -245,5 +243,4 @@ class MakeStage extends Command
 
         return $stub;
     }
-
 }

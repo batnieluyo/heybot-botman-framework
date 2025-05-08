@@ -12,12 +12,13 @@ use Carbon\Carbon;
 class DefaultStage extends Botman
 {
     const string GROUP = 'default';
+
     const string ACTION_NAME = 'default';
 
     public function handle(WhatsAppMessage $whatsAppMessage, Contact $contact)
     {
-        $this->saveIncomeMessage(contact: $contact, request: $whatsAppMessage->request);
         $this->toPhoneNumber($contact->phone);
+        $this->saveIncomeMessage(contact: $contact, request: $whatsAppMessage->request);
 
         // Add your awesome code 🚀
 
@@ -25,12 +26,12 @@ class DefaultStage extends Botman
         $secondMessage = (new TextMessage)->allowPreviewUrl()->handle(message: '¡Hola! Visita https://google.com');
 
         // Recommended for only one message
-        //$this->sendMessage($firstMessage);
+        // $this->sendMessage($firstMessage);
 
         // Recommended if you will send many messages at once
         $this->sendManyMessages([
             $firstMessage,
-            $secondMessage
+            $secondMessage,
         ]);
 
         // Also you can validate some message type

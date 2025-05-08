@@ -20,7 +20,7 @@ class InteractiveButtonsMessage
 
     public function handle(string $message, ?string $footer = null)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'interactiveReplyButtons')

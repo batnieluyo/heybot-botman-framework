@@ -8,7 +8,7 @@ class CallToActionMessage
 {
     public function handle(string $body, $buttonText, $buttonUrl, $header = null, $footer = null)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'callToAction')

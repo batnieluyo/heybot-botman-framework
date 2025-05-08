@@ -8,7 +8,7 @@ class RequestLocationMessage
 {
     public function handle(string $body)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'requestLocation')

@@ -20,14 +20,14 @@ class InteractiveButtonsMessageWithImage
 
     public function handle(string $message, string $imageUrl, ?string $footer = null)
     {
-        $fluent = new Fluent();
+        $fluent = new Fluent;
 
         return $fluent
             ->set('type', 'interactiveReplyButtons')
             ->set('payload', [
                 'header' => [
                     'type' => 'image',
-                    'url' => $imageUrl
+                    'url' => $imageUrl,
                 ],
                 'body' => $message,
                 'footer' => $footer,

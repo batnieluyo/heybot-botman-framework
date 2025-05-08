@@ -3,12 +3,9 @@
 namespace App\Listeners;
 
 use App\Actions\Contact\ContactAction;
-
 use App\AutoLoaders\JourneyAutoloader;
 use App\Dto\WhatsAppMessage;
 use App\Events\WhatsAppNewMessage;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class WhatsAppNewMessageListener
 {

@@ -12,46 +12,46 @@ class CodeBlockController extends Controller
     {
         $contact = [
             'phone' => $phone,
-            'displayName' => $displayName
+            'displayName' => $displayName,
         ];
 
         $textMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::TEXT, content: [
-            'body' => '¡Hello!'
+            'body' => '¡Hello!',
         ]);
 
         $imageMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::TEXT, content: [
             'url' => 'https://cdn-example.com/00000-0000-0000-0000-00000000.png',
             'mimeType' => 'application/png',
             'fileSize' => 160897,
-            'body' => null
+            'body' => null,
         ]);
 
         $imageMessageWithMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::TEXT, content: [
             'url' => 'https://cdn-example.com/00000-0000-0000-0000-00000000.png',
             'mimeType' => 'application/png',
             'fileSize' => 160897,
-            'body' => 'Has body text message'
+            'body' => 'Has body text message',
         ]);
 
         $documentMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::DOCUMENT, content: [
             'url' => 'https://cdn-example.com/00000-0000-0000-0000-00000000.pdf',
             'mimeType' => 'application/pdf',
             'fileSize' => 160897,
-            'body' => null
+            'body' => null,
         ]);
 
         $audioMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::AUDIO, content: [
             'url' => 'https://cdn-example.com/00000-0000-0000-0000-00000000.mp3',
             'mimeType' => 'audio/mpeg',
             'fileSize' => 160897,
-            'body' => null
+            'body' => null,
         ]);
 
         $sticker = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::STICKER, content: [
             'url' => 'https://cdn-example.com/00000-0000-0000-0000-00000000.webp',
             'mimeType' => 'image/webp',
             'fileSize' => 160897,
-            'body' => null
+            'body' => null,
         ]);
 
         $interactiveListMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::INTERACTIVE, content: [
@@ -68,8 +68,8 @@ class CodeBlockController extends Controller
         ]);
 
         $locationMessage = (new MockMessage)->create(contact: $contact, messageType: WhatsAppMessageType::LOCATION, content: [
-            'latitude' => "100.000000",
-            'longitude' => "-100.000000",
+            'latitude' => '100.000000',
+            'longitude' => '-100.000000',
         ]);
 
         return [
@@ -142,20 +142,21 @@ class CodeBlockController extends Controller
     public function show(Request $request, $messageTypeId)
     {
         $phone = $request->get('phone', 5217772334454);
-        $displayName = "John Doe";
+        $displayName = 'John Doe';
 
         $data = collect($this->income($phone, $displayName))->where('id', $messageTypeId)->first();
+
         return response()->json($data);
     }
 
     public function index(Request $request)
     {
         $phone = $request->get('phone', 5217772334454);
-        $displayName = "John Doe";
+        $displayName = 'John Doe';
 
         return view('repl.whatsapp', [
             'phone' => $phone,
-            'examples' => $this->income($phone, $displayName)
+            'examples' => $this->income($phone, $displayName),
         ]);
     }
 }
