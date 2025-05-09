@@ -36,11 +36,9 @@ class Whatsapp implements Strategy
     /**
      * @return $this
      */
-    public function template(string $templateId)
+    public function template()
     {
-        $this->templateId = $templateId;
         $this->resource = self::RESOURCE_MESSAGING_TEMPLATE;
-
         return $this;
     }
 
@@ -62,7 +60,7 @@ class Whatsapp implements Strategy
         ])->acceptJson()
             ->asJson()
             ->post(
-                "https://heybot.cloud/v1/$this->resource",
+                "https://api.heybot.cloud/v1/$this->resource",
                 $payload
             );
     }
@@ -86,7 +84,7 @@ class Whatsapp implements Strategy
             ->acceptJson()
             ->asJson()
             ->post(
-                "https://heybot.cloud/v1/$this->resource",
+                "https://api.heybot.cloud/v1/$this->resource",
                 $payload
             );
     }
