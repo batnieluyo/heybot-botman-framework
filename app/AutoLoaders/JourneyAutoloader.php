@@ -14,9 +14,6 @@ use Symfony\Component\Finder\Finder;
  * */
 class JourneyAutoloader
 {
-    /**
-     * @return \App\AutoLoaders\JourneyStageInterface
-     */
     public static function boot(string $stage)
     {
         $location = base_path('app/Actions/Journey/Stages');
