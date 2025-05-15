@@ -8,7 +8,7 @@ class InteractiveButtonsMessage
 {
     public array $buttons = [];
 
-    public function withButton(string $id, array $buttonText)
+    public function withButton(string $id, string $buttonText)
     {
         $this->buttons[] = [
             'id' => $id,
