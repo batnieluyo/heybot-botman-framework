@@ -50,8 +50,8 @@ class Whatsapp implements Strategy
     public function request(array $data)
     {
         $responses = [];
-        foreach ($data as $content) {
 
+        foreach ($data as $content) {
             $content['toPhoneNumber'] = $this->phone;
             $response = Http::withToken(
                 $this->apiKey

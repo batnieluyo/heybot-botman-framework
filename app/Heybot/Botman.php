@@ -27,8 +27,6 @@ class Botman extends Heybot
     }
 
     /**
-     * @return PromiseInterface|Response|null
-     *
      * @throws ConnectionException
      */
     public function sendMessage($message)
@@ -41,8 +39,6 @@ class Botman extends Heybot
     }
 
     /**
-     * @return PromiseInterface|Response|null
-     *
      * @throws ConnectionException
      */
     public function sendManyMessages(array $messages)
