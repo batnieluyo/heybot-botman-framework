@@ -27,8 +27,6 @@ class Heybot
     }
 
     /**
-     * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response|null
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     protected function __send($message)
@@ -43,8 +41,6 @@ class Heybot
     }
 
     /**
-     * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response|null
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     protected function __bulkSend(array $messages)
