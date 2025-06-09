@@ -20,7 +20,9 @@ class Whatsapp implements Strategy
 
     public function __construct(
         private readonly ?string $apiKey = null,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @return $this
@@ -45,24 +47,31 @@ class Whatsapp implements Strategy
     /**
      * @throws ConnectionException
      */
-    public function request(array $data): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+    public function request(array $data)
     {
-        $payload = array_merge(['toPhoneNumber' => $this->phone], $data);
+        $responses = [];
+        foreach ($data as $content) {
 
-        return Http::withToken(
-            $this->apiKey
-        )->timeout(
-            30
-        )->withHeaders([
-            'User-Agent' => self::USER_AGENT,
-            'Connection' => 'keep-alive',
-            'Accept-Encoding' => 'gzip, deflate',
-        ])->acceptJson()
-            ->asJson()
-            ->post(
-                "https://api.heybot.cloud/v1/$this->resource",
-                $payload
-            );
+            $content['toPhoneNumber'] = $this->phone;
+            $response = Http::withToken(
+                $this->apiKey
+            )->timeout(
+                30
+            )->withHeaders([
+                'User-Agent' => self::USER_AGENT,
+                'Connection' => 'keep-alive',
+                'Accept-Encoding' => 'gzip, deflate',
+            ])->acceptJson()
+                ->asJson()
+                ->post(
+                    "https://api.heybot.cloud/v1/$this->resource",
+                    $content
+                );
+
+            $responses[] = $response;
+        }
+
+        return $responses;
     }
 
     /**

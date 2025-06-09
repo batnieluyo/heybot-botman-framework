@@ -11,7 +11,7 @@ namespace App\Heybot\Client\Interfaces;
  */
 interface Strategy
 {
-    public function request(array $data): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response;
+    public function request(array $data);
 
     public function requestAsync(array $data): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response;
 }
