@@ -15,6 +15,7 @@ class Message extends Model
 
     protected $fillable = [
         'ulid',
+        'wamid',
         'direction',
         'payload_type',
         'contact_id',

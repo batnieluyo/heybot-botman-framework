@@ -2,10 +2,16 @@
 
 namespace App\Dto;
 
+use App\Models\Contact;
+use App\Models\Message;
 use App\Options\WhatsAppMessageType;
 
 class WhatsAppMessage
 {
+    public ?Contact $contact = null;
+    public ?Message $message = null;
+    public array $responses = [];
+
     public int $timestamp {
         get => $this->request['timestamp'];
     }
@@ -33,6 +39,27 @@ class WhatsAppMessage
     public function __construct(
         public array $request
     ) {}
+
+    public function withContact(Contact $contact)
+    {
+        $this->contact = $contact;
+        return $this;
+    }
+
+    public function saveIncomeMessage()
+    {
+        if (!is_null($this->contact)) {
+            $this->message = Message::create([
+                'wamid' => $this->messageId,
+                'direction' => 'inbound',
+                'payload_type' => 'message',
+                'contact_id' => $this->contact->id,
+                'payload' => $this->request,
+            ]);
+        }
+
+        return $this;
+    }
 
     public function getTextMessage(): ?string
     {

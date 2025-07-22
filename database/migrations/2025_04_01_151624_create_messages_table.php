@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->ulid()->primary();
+            $table->string('wamid', 128)->nullable();
             $table->unsignedBigInteger('contact_id')->nullable();
             $table->enum('direction', ['inbound', 'outbound'])->default('inbound');
             $table->enum('payload_type', ['message', 'template'])->default('message');

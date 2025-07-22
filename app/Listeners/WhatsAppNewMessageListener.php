@@ -21,6 +21,8 @@ class WhatsAppNewMessageListener
             displayName: $whatsapp->contactName,
         );
 
-        JourneyAutoloader::boot($contact->current_stage)->handle(whatsAppMessage: $whatsapp, contact: $contact);
+        $whatsapp->withContact(contact: $contact)->saveIncomeMessage();
+
+        JourneyAutoloader::boot($contact->current_stage)->handle(whatsAppMessage: $whatsapp);
     }
 }
