@@ -4,17 +4,28 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class LocationMessage
+class LocationMessage implements MessageInterface
 {
-    public function handle($latitude, $longitude, $locationName, $address)
-    {
-        $fluent = new Fluent;
+    public ?Fluent $fluent = null;
 
-        return $fluent
+    public function with($latitude, $longitude, $locationName, $address)
+    {
+        $this->fluent = (new Fluent)
             ->set('type', 'location')
             ->set('payload.latitude', $latitude)
             ->set('payload.longitude', $longitude)
             ->set('payload.locationName', $locationName)
             ->set('payload.address', $address);
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        if (!$this->fluent) {
+            throw new \LogicException("You must call with() before toArray()");
+        }
+
+        return $this->fluent->toArray();
     }
 }

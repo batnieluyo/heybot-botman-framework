@@ -4,27 +4,26 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class ImageMessage
+class ImageMessage implements MessageInterface
 {
-    private ?string $message = null;
+    public ?Fluent $fluent = null;
 
-    public function withMessage(string $message)
+    public function with(string $url, ?string $message = null)
     {
-        $this->message = $message;
+        $this->fluent
+            ->set('type', 'image')
+            ->set('payload.body', $message)
+            ->set('payload.url', $url);
 
         return $this;
     }
 
-    /**
-     * @return Fluent
-     */
-    public function handle(string $fileUrl)
+    public function toArray(): array
     {
-        $fluent = new Fluent;
+        if (!$this->fluent) {
+            throw new \LogicException("You must call with() before toArray()");
+        }
 
-        return $fluent
-            ->set('type', 'image')
-            ->set('payload.url', $fileUrl)
-            ->set('payload.body', $this->message);
+        return $this->fluent->toArray();
     }
 }

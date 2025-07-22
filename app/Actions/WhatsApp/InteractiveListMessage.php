@@ -4,33 +4,41 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class InteractiveListMessage
+class InteractiveListMessage implements MessageInterface
 {
-    public array $sections = [];
+    public ?Fluent $fluent = null;
 
-    public function withSection(string $title, array $row)
+    public function section(string $title, Row ...$rows)
     {
-        $this->sections[] = [
-            'id' => $row['id'],
-            'title' => $row['title'],
-            'description' => $row['description'],
+        $sections = $this->fluent->get('payload.sections', []);
+
+        $sections[] = [
+            'title' => $title,
+            'rows' => collect($rows)->map(fn($row) => $row->toArray())->toArray(),
         ];
+
+        $this->fluent->set('payload.sections', $sections);
 
         return $this;
     }
 
-    public function handle(string $header, string $message, string $buttonText, ?string $footer = null)
+    public function with(?string $header = null, ?string $message = null, $buttonText = 'Ver opciones', ?string $footer = null)
     {
-        $fluent = new Fluent;
-
-        return $fluent
+        $this->fluent
             ->set('type', 'interactiveList')
-            ->set('payload', [
-                'header' => $header,
-                'body' => $message,
-                'footer' => $footer,
-                'buttonText' => $buttonText,
-                'sections' => $this->sections,
-            ]);
+            ->set('payload.header', $header)
+            ->set('payload.body', $message)
+            ->set('payload.buttonText', $buttonText)
+            ->set('payload.footer', $footer);
+
+        return $this;
+    }
+    public function toArray(): array
+    {
+        if (!$this->fluent) {
+            throw new \LogicException("You must call with() before toArray()");
+        }
+
+        return $this->fluent->toArray();
     }
 }

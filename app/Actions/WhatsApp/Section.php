@@ -4,15 +4,20 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class AudioMessage implements MessageInterface
+class Section implements MessageInterface
 {
     public ?Fluent $fluent = null;
 
-    public function with(string $fileUrl)
+    public function __construct(
+        public readonly string $title
+    ) {}
+
+    public function withRows(Row ...$rows)
     {
+        $rows = collect($rows)->map(fn($row) => $row->toArray())->toArray();
         $this->fluent
-            ->set('type', 'audio')
-            ->set('payload.url', $fileUrl);
+            ->set('title', $this->title)
+            ->set('rows', $rows);
 
         return $this;
     }

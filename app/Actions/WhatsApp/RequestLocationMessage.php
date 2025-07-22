@@ -4,14 +4,29 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class RequestLocationMessage
+class RequestLocationMessage implements MessageInterface
 {
-    public function handle(string $body)
-    {
-        $fluent = new Fluent;
+    public ?Fluent $fluent = null;
 
-        return $fluent
+    /**
+     * @param string $message
+     * @return $this
+     */
+    public function with(string $message)
+    {
+        $this->fluent = (new Fluent)
             ->set('type', 'requestLocation')
-            ->set('payload.body', $body);
+            ->set('payload.body', $message);
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        if (!$this->fluent) {
+            throw new \LogicException("You must call handle() before toArray()");
+        }
+
+        return $this->fluent->toArray();
     }
 }

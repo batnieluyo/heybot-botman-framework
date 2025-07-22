@@ -4,30 +4,48 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class InteractiveButtonsMessage
+class InteractiveButtonsMessage implements MessageInterface
 {
-    public array $buttons = [];
+    public ?Fluent $fluent = null;
 
-    public function withButton(string $id, string $buttonText)
+    public function button(Button $button)
     {
-        $this->buttons[] = [
-            'id' => $id,
-            'buttonText' => $buttonText,
-        ];
+        $items = $this->fluent->get('payload.buttons', []);
+
+        $items[] = $button->toArray();
+
+        $this->fluent->set('payload.buttons', $items);
 
         return $this;
     }
 
-    public function handle(string $message, ?string $footer = null)
+    public function buttons(Button ...$button)
     {
-        $fluent = new Fluent;
+        $items = $this->fluent->get('payload.buttons', []);
 
-        return $fluent
+        $items[] = collect($button)->map(fn($button) => $button->toArray())->toArray();
+
+        $this->fluent->set('payload.buttons', $items);
+
+        return $this;
+    }
+
+    public function with(string $message, ?string $footer = null)
+    {
+        $this->fluent
             ->set('type', 'interactiveReplyButtons')
-            ->set('payload', [
-                'body' => $message,
-                'footer' => $footer,
-                'buttons' => $this->buttons,
-            ]);
+            ->set('payload.body', $message)
+            ->set('payload.footer', $footer);
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        if (!$this->fluent) {
+            throw new \LogicException("You must call with() before toArray()");
+        }
+
+        return $this->fluent->toArray();
     }
 }

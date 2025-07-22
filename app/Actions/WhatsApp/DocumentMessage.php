@@ -4,18 +4,26 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class DocumentMessage
+class DocumentMessage implements MessageInterface
 {
-    /**
-     * @return Fluent
-     */
-    public function handle(string $fileName, string $fileUrl)
-    {
-        $fluent = new Fluent;
+    public ?Fluent $fluent = null;
 
-        return $fluent
+    public function with(string $fileName, string $fileUrl)
+    {
+        $this->fluent
             ->set('type', 'document')
-            ->set('payload.url', $fileUrl)
-            ->set('payload.filename', $fileName);
+            ->set('payload.filename', $fileName)
+            ->set('payload.url', $fileUrl);
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        if (!$this->fluent) {
+            throw new \LogicException("You must call with() before toArray()");
+        }
+
+        return $this->fluent->toArray();
     }
 }
