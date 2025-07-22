@@ -4,27 +4,31 @@ namespace App\Actions\WhatsApp;
 
 use Illuminate\Support\Fluent;
 
-class TextMessage
+class TextMessage implements MessageInterface
 {
-    private bool $linkPreview = false;
+    public ?Fluent $fluent = null;
 
-    public function allowPreviewUrl()
+    /**
+     * @param string $message
+     * @param bool $withLinkPreview
+     * @return self
+     */
+    public function with(string $message, bool $withLinkPreview = false): self
     {
-        $this->linkPreview = true;
+        $this->fluent = (new Fluent)
+            ->set('type', 'text')
+            ->set('payload.body', $message)
+            ->set('payload.linkPreview', $withLinkPreview);
 
         return $this;
     }
 
-    /**
-     * @return Fluent
-     */
-    public function handle($message)
+    public function toArray(): array
     {
-        $fluent = new Fluent;
+        if (!$this->fluent) {
+            throw new \LogicException("You must call handle() before toArray()");
+        }
 
-        return $fluent
-            ->set('type', 'text')
-            ->set('payload.body', $message)
-            ->set('payload.linkPreview', $this->linkPreview);
+        return $this->fluent->toArray();
     }
 }

@@ -2,49 +2,40 @@
 
 namespace App\Actions\Journey\Stages;
 
-use Carbon\Carbon;
-use App\Heybot\Botman;
-use App\Models\Contact;
-use App\Dto\WhatsAppMessage;
-use App\Options\WhatsAppMessageType;
+use App\Actions\WhatsApp\WhatsApp;
 use App\Actions\WhatsApp\TextMessage;
+use App\Dto\WhatsAppMessage;
 
-class {{ class }} extends Botman
+class {{ class }}
 {
     const string GROUP = 'default';
     const string ACTION_NAME = 'default';
 
-    public function handle(WhatsAppMessage $whatsAppMessage, Contact $contact)
-        {
-            $this->toPhoneNumber($contact->phone);
-            $this->saveIncomeMessage(contact: $contact, request: $whatsAppMessage->request);
+    public function handle(WhatsAppMessage $whatsAppMessage)
+    {
+        $whatsapp = new WhatsApp(contact: $whatsAppMessage->contact);
 
-            // Add your awesome code 🚀
+        // Add your awesome code 🚀
 
-            // You can validate some message type
-            // if ($whatsAppMessage->messageType !== WhatsAppMessageType::TEXT) {
-            // ...
-            //       return;
-            // }
+        $whatsapp->add(
+            (new TextMessage)->with(message: '¡Hola mundo 1!')
+        );
 
-            $firstMessage = (new TextMessage)->handle(message: '¡Hola mundo!');
-            $secondMessage = (new TextMessage)->allowPreviewUrl()->handle(message: '¡Hola! Visita https://google.com');
+        $whatsapp->add(
+            (new TextMessage)->with(message: '¡Hola mundo 2!'),
+            (new TextMessage)->with(message: '¡Hola! Visita https://google.com', withLinkPreview: true),
+        );
 
-            // Recommended for only one message
-            // $this->sendMessage($firstMessage);
+        // Also, you can validate some message type
+        // if ($whatsAppMessage->messageType !== WhatsAppMessageType::TEXT) {
+        // ...
+        // }
 
-            // Recommended if you will send many messages at once
-            $this->sendManyMessages([
-                $firstMessage,
-                $secondMessage
-            ]);
+        $whatsapp->send();
 
-            $this->saveReplyMessagesTo(contact: $contact);
-
-            $contact->update([
-                'current_group' => self::GROUP,
-                'current_stage' => self::ACTION_NAME,
-                'message_send_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ]);
-        }
+        $whatsAppMessage->contact->move(
+            toGroup: self::GROUP,
+            toStage: self::ACTION_NAME
+        );
+    }
 }

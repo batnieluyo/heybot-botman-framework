@@ -2,49 +2,36 @@
 
 namespace App\Actions\Journey\Stages;
 
+use App\Actions\WhatsApp\WhatsApp;
 use App\Actions\WhatsApp\TextMessage;
 use App\Dto\WhatsAppMessage;
-use App\Heybot\Botman;
-use App\Models\Contact;
-use App\Options\WhatsAppMessageType;
-use Carbon\Carbon;
 
-class DefaultStage extends Botman
+class DefaultStage
 {
     const string GROUP = 'default';
-
     const string ACTION_NAME = 'default';
 
-    public function handle(WhatsAppMessage $whatsAppMessage, Contact $contact)
+    public function handle(WhatsAppMessage $whatsAppMessage)
     {
-        $this->toPhoneNumber($contact->phone);
-        $this->saveIncomeMessage(contact: $contact, request: $whatsAppMessage->request);
+        $whatsapp = new WhatsApp(contact: $whatsAppMessage->contact);
 
         // Add your awesome code 🚀
 
-        $firstMessage = (new TextMessage)->handle(message: '¡Hola mundo!');
-        $secondMessage = (new TextMessage)->allowPreviewUrl()->handle(message: '¡Hola! Visita https://google.com');
+        $whatsapp->add(
+            (new TextMessage)->with(message: '¡Hola mundo!'),
+            (new TextMessage)->with(message: '¡Hola! Visita https://google.com', withLinkPreview: true),
+        );
 
-        // Recommended for only one message
-        // $this->sendMessage($firstMessage);
-
-        // Recommended if you will send many messages at once
-        $this->sendManyMessages([
-            $firstMessage,
-            $secondMessage,
-        ]);
-
-        // Also you can validate some message type
+        // Also, you can validate some message type
         // if ($whatsAppMessage->messageType !== WhatsAppMessageType::TEXT) {
         // ...
         // }
 
-        $this->saveReplyMessagesTo(contact: $contact);
+        $whatsapp->send();
 
-        $contact->update([
-            'current_group' => self::GROUP,
-            'current_stage' => self::ACTION_NAME,
-            'message_send_at' => Carbon::now()->format('Y-m-d H:i:s'),
-        ]);
+        $whatsAppMessage->contact->move(
+            toGroup: self::GROUP,
+            toStage: self::ACTION_NAME
+        );
     }
 }

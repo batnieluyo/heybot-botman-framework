@@ -20,7 +20,7 @@ class ContactAction
             'message_send_at' => null,
         ]);
 
-        if (! $contact->wasRecentlyCreated) {
+        if (!$contact->wasRecentlyCreated) {
             $contact->update([
                 'message_received_at' => $time,
             ]);
@@ -28,4 +28,6 @@ class ContactAction
 
         return $contact;
     }
+
+
 }
