@@ -31,7 +31,7 @@ class WhatsAppServiceProvider extends ServiceProvider
             ->name('webhook.')
             ->prefix('webhook')
             ->group(function () {
-                Route::post('/whatsapp/new-message', [WhatsappController::class, 'store']);
+                Route::post('/whatsapp', [WhatsappController::class, 'store']);
             });
     }
 }
