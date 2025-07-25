@@ -2,12 +2,11 @@
 
 namespace App\Actions\WhatsApp;
 
+use App\Actions\Clients\AbstractHttp;
 use App\Models\Contact;
 use App\Models\Message;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpClient\CurlHttpClient;
 
 class WhatsApp
 {
@@ -15,44 +14,8 @@ class WhatsApp
 
     public function __construct(
         private readonly Contact $contact,
-        private readonly string $client = 'guzzleClient',
+        private readonly AbstractHttp $client = new \App\Actions\Clients\SymfonyCurlHttp,
     ) {}
-
-    private function nativeCurlClient(string $server, array $message)
-    {
-        return exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode($message) . "' $server > /dev/null 2>&1 &");
-    }
-
-    private function curlHttpClient(string $server, array $message)
-    {
-        return new CurlHttpClient([
-            'buffer' => false,
-            'max_redirects' => 0,
-            'verify_peer' => true,
-            'verify_host' => true,
-        ])->request('POST', $server, [
-            'timeout' => 30,
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'heybot-client-php/v1',
-            ],
-            'json' => $message,
-        ]);
-    }
-
-    private function guzzleClient(string $server, array $message)
-    {
-        return Http::withToken(config('whatsapp.api_key'))
-            ->timeout(30)
-            ->withHeaders([
-                'User-Agent' => 'heybot-client-php/v1',
-                'Connection' => 'keep-alive',
-                'Accept-Encoding' => 'gzip, deflate',
-            ])
-            ->acceptJson()
-            ->asJson()
-            ->post("https://api.heybot.cloud/v1/messages", $message);
-    }
 
     public function add(MessageInterface ...$messages): void
     {
@@ -69,20 +32,15 @@ class WhatsApp
         $canConnectToServer = !is_null($apiKey);
         $phone = $this->contact->phone;
 
-        $responses = collect($this->messages)->map(function ($message) use ($apiKey, $ts, $canConnectToServer, $phone) {
+        $client = new \App\Actions\Clients\ClientHttp($this->client);
+
+        $http = $client->http->withToken($apiKey);
+
+        $responses = collect($this->messages)->map(function ($message) use ($http, $apiKey, $ts, $canConnectToServer, $phone) {
+
             if ($canConnectToServer) {
                 $message->fluent->set('toPhoneNumber', $phone);
-
-                Http::withToken($apiKey)
-                    ->timeout(30)
-                    ->withHeaders([
-                        'User-Agent' => 'heybot-client-php/v1',
-                        'Connection' => 'keep-alive',
-                        'Accept-Encoding' => 'gzip, deflate',
-                    ])
-                    ->acceptJson()
-                    ->asJson()
-                    ->post("https://api.heybot.cloud/v1/messages", $message->toArray());
+                $http->withPayload($message->toArray())->post("https://api.heybot.cloud/v1/messages");
             }
 
             $object = [
