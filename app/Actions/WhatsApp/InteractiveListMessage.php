@@ -10,6 +10,10 @@ class InteractiveListMessage implements MessageInterface
 
     public function section(string $title, Row ...$rows)
     {
+        if (is_null($this->fluent)) {
+            $this->fluent = new Fluent;
+        }
+
         $sections = $this->fluent->get('payload.sections', []);
 
         $sections[] = [

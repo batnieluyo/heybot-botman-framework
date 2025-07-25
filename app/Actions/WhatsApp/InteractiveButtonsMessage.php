@@ -10,6 +10,10 @@ class InteractiveButtonsMessage implements MessageInterface
 
     public function button(Button $button)
     {
+        if (is_null($this->fluent)) {
+            $this->fluent = new Fluent;
+        }
+
         $items = $this->fluent->get('payload.buttons', []);
 
         $items[] = $button->toArray();
@@ -21,6 +25,10 @@ class InteractiveButtonsMessage implements MessageInterface
 
     public function buttons(Button ...$button)
     {
+        if (is_null($this->fluent)) {
+            $this->fluent = new Fluent;
+        }
+
         $items = $this->fluent->get('payload.buttons', []);
 
         $items[] = collect($button)->map(fn($button) => $button->toArray())->toArray();

@@ -10,6 +10,10 @@ class ImageMessage implements MessageInterface
 
     public function with(string $url, ?string $message = null)
     {
+        if (is_null($this->fluent)) {
+            $this->fluent = new Fluent;
+        }
+
         $this->fluent
             ->set('type', 'image')
             ->set('payload.body', $message)
