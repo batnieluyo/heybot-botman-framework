@@ -14,15 +14,21 @@ Route::get('/', function () {
 ]);
 
 Route::get('/benchmark', function () {
+    $url = "";
     Benchmark::dd([
-        'curl' => fn () => exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode(['foo'=>'bar']) . "' https://webhook.site/6bfcff5c-95f8-4801-95fb-505ac29a89e4 > /dev/null 2>&1 &"),
-        'Guzzle' => fn () => \Illuminate\Support\Facades\Http::get('https://webhook.site/6bfcff5c-95f8-4801-95fb-505ac29a89e4'),
-        'Symfony HttpClient' => fn () => HttpClient::create(['http_version' => '2.0'])->request('GET','https://webhook.site/6bfcff5c-95f8-4801-95fb-505ac29a89e4'),
+        'process' => fn() => Process::start([
+            'bash',
+            '-c',
+            "curl -X POST -H 'Content-Type: application/json' -d '" .json_encode(['foo'=>'bar']) . "' $url > /dev/null 2>&1 &"
+        ]),
+        'curl' => fn () => exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode(['foo'=>'bar']) . "' $url > /dev/null 2>&1 &"),
+        'Guzzle' => fn () => \Illuminate\Support\Facades\Http::get($url),
+        'Symfony HttpClient' => fn () => HttpClient::create(['http_version' => '2.0'])->request('GET', $url),
         'Symfony CurlHttpClient' => fn () => new CurlHttpClient([
             'buffer' => false,
             'max_redirects' => 0,
             'verify_peer' => true,
             'verify_host' => true,
-        ])->request('GET','https://webhook.site/6bfcff5c-95f8-4801-95fb-505ac29a89e4'),
+        ])->request('GET',$url),
     ]);
-})->name('health');
+});

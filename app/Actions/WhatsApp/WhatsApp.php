@@ -20,7 +20,7 @@ class WhatsApp
 
     private function nativeCurlClient(string $server, array $message)
     {
-        return exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode($content) . "' $server > /dev/null 2>&1 &");
+        return exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode($message) . "' $server > /dev/null 2>&1 &");
     }
 
     private function curlHttpClient(string $server, array $message)
