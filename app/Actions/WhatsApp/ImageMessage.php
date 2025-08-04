@@ -8,14 +8,9 @@ class ImageMessage implements MessageInterface
 {
     public ?Fluent $fluent = null;
 
-    public function __construct()
-    {
-        $this->fluent = new Fluent;
-    }
-
     public function with(string $url, ?string $message = null)
     {
-        $this->fluent
+        $this->fluent = (new Fluent)
             ->set('type', 'image')
             ->set('payload.body', $message)
             ->set('payload.url', $url);

@@ -10,7 +10,7 @@ class CallToActionMessage implements MessageInterface
 
     public function with(string $message, string $buttonText, string $buttonUrl, ?string $header = null, ?string $footer = null)
     {
-        $this->fluent
+        $this->fluent = (new Fluent)
             ->set('type', 'callToAction')
             ->set('payload.header', $header)
             ->set('payload.body', $message)

@@ -15,9 +15,7 @@ class Section implements MessageInterface
     public function withRows(Row ...$rows)
     {
         $rows = collect($rows)->map(fn($row) => $row->toArray())->toArray();
-        $this->fluent
-            ->set('title', $this->title)
-            ->set('rows', $rows);
+        $this->fluent = (new Fluent)->set('title', $this->title)->set('rows', $rows);
 
         return $this;
     }

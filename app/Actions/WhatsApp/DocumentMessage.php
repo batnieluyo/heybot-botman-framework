@@ -10,7 +10,7 @@ class DocumentMessage implements MessageInterface
 
     public function with(string $fileName, string $fileUrl)
     {
-        $this->fluent
+        $this->fluent = (new Fluent)
             ->set('type', 'document')
             ->set('payload.filename', $fileName)
             ->set('payload.url', $fileUrl);

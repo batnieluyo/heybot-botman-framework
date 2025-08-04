@@ -8,6 +8,11 @@ class InteractiveButtonsMessageWithImage implements MessageInterface
 {
     public ?Fluent $fluent = null;
 
+    public function __construct()
+    {
+        $this->fluent = new Fluent;
+    }
+
     public function withButton(string $id, array $buttonText)
     {
         $sections = $this->fluent->get('payload.buttons', []);

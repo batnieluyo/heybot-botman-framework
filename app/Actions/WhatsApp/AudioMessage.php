@@ -10,7 +10,7 @@ class AudioMessage implements MessageInterface
 
     public function with(string $fileUrl)
     {
-        $this->fluent
+        $this->fluent = (new Fluent)
             ->set('type', 'audio')
             ->set('payload.url', $fileUrl);
 

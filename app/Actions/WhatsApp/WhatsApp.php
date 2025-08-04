@@ -23,7 +23,7 @@ class WhatsApp
         return exec("curl -X POST -H 'Content-Type: application/json' -d '" . json_encode($message) . "' $server > /dev/null 2>&1 &");
     }
 
-    private function curlHttpClient(string $server, array $message)
+    private function curlHttpClient(string $server, array $message, string $token)
     {
         return new CurlHttpClient([
             'buffer' => false,
@@ -33,6 +33,7 @@ class WhatsApp
         ])->request('POST', $server, [
             'timeout' => 30,
             'headers' => [
+                'Authorization' => "Bearer $token",
                 'Accept' => 'application/json',
                 'User-Agent' => 'heybot-client-php/v1',
             ],
@@ -72,17 +73,7 @@ class WhatsApp
         $responses = collect($this->messages)->map(function ($message) use ($apiKey, $ts, $canConnectToServer, $phone) {
             if ($canConnectToServer) {
                 $message->fluent->set('toPhoneNumber', $phone);
-
-                Http::withToken($apiKey)
-                    ->timeout(30)
-                    ->withHeaders([
-                        'User-Agent' => 'heybot-client-php/v1',
-                        'Connection' => 'keep-alive',
-                        'Accept-Encoding' => 'gzip, deflate',
-                    ])
-                    ->acceptJson()
-                    ->asJson()
-                    ->post("https://api.heybot.cloud/v1/messages", $message->toArray());
+                $this->curlHttpClient('https://api.heybot.cloud/v1/messages', $message->toArray(), $apiKey);
             }
 
             $object = [
