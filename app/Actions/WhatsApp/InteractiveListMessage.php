@@ -33,7 +33,7 @@ class InteractiveListMessage implements MessageInterface
             ->set('type', 'interactiveList')
             ->set('payload.header', $header)
             ->set('payload.body', $message)
-            ->set('payload.buttonText', $buttonText)
+            ->set('payload.button', $buttonText)
             ->set('payload.footer', $footer);
 
         return $this;
