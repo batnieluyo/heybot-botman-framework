@@ -28,7 +28,9 @@ class InteractiveButtonsMessage implements MessageInterface
     {
         $items = $this->fluent->get('payload.buttons', []);
 
-        $items[] = collect($button)->map(fn($button) => $button->toArray())->toArray();
+        collect($button)->map(function ($button) use (&$items) {
+            $items[] = $button->toArray();
+        });
 
         $this->fluent->set('payload.buttons', $items);
 
