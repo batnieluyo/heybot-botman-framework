@@ -11,6 +11,15 @@ class {{ class }}
     const string GROUP = 'default';
     const string ACTION_NAME = 'default';
 
+    public static function defaultMessage(): TextMessage
+    {
+        $message = <<<message
+        Hi
+        message;
+
+        return (new TextMessage)->with(message: $message);
+    }
+
     public function handle(WhatsAppMessage $whatsAppMessage)
     {
         $whatsapp = new WhatsApp(contact: $whatsAppMessage->contact);
